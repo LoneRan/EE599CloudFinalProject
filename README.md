@@ -16,7 +16,7 @@ Developed using Flask. Calling API from online source.
 python3
 flask
 
-To start flask application: `python3 -m flask run` (if you're using MacOS)
+To start flask application: `python3 -m flask run` (if you're using MacOS/Linux)
 
 # How to use
 1. Navigate to `http://localhost:5000`
