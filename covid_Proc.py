@@ -45,3 +45,4 @@ def getSevenByState(state):
 
     print(json.dumps(output_data[state],indent=4))
 
+#TODO save to database

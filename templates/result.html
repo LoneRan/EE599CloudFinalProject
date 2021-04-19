@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>About us</title>
+        <title>Search result</title>
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
@@ -21,10 +21,20 @@
             <!-- About-->
             <section class="resume-section" id="about">
                 <div class="resume-section-content">
-                    <h1 class="mb-1">
-                        Search result for
-                        <span class="text-primary">{{stateName}}</span>
-                    </h1>
+                    {%if isGuess == true%}
+                        <h2>You typed “{{stateName}}”, we guess you are searching for 
+                        <span class="text-primary">{{guessName}}</span>
+                        </h2>
+                        <h4>
+                            <form action="/" method="GET">
+                                <button type="submit" class="btn btn-primary">Go back to homepage</button>
+                            </form>
+                        </h4>
+                    {%endif%}
+                    <h3 class="mb-1">
+                        Search results for
+                        <span class="text-primary">{{guessName}}</span>
+                    </h3>
                     
                 </div>
             </section>

@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect
 import requests
 import json
+from helper import guessState
 app = Flask(__name__)
 CHECK = 0
 
@@ -26,5 +27,10 @@ def data():
 def searchState():
     stateName = request.form['stateName']
     print(stateName)
-
-    return render_template('result.html', stateName = stateName)
+    guessName = guessState(stateName)
+    isGuess = False
+    if guessName != stateName:
+        
+        isGuess = True
+    
+    return render_template('result.html', stateName = stateName, guessName = guessName, isGuess = isGuess)
