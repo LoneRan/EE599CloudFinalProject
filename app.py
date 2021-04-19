@@ -18,5 +18,13 @@ def form():
 
 @app.route('/contact')
 def data():
-    
+
     return render_template('data.html')
+
+
+@app.route('/searchState', methods=['POST'])
+def searchState():
+    stateName = request.form['stateName']
+    print(stateName)
+
+    return render_template('result.html', stateName = stateName)
