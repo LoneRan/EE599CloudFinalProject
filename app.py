@@ -11,7 +11,6 @@ def home():
 
     return render_template("index.html")
 
-
 @app.route('/about')
 def form():
     
@@ -34,3 +33,9 @@ def searchState():
         isGuess = True
     
     return render_template('result.html', stateName = stateName, guessName = guessName, isGuess = isGuess)
+
+
+@app.route('/login')
+def login():
+    
+    return render_template('login.html')
