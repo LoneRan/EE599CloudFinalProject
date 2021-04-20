@@ -19,7 +19,7 @@ states_abbr = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DC", "DE", "FL", "GA",
 def isValidState(state):
     print(len(states_names))
     print(len(states_abbr))
-    if state in states_names or state in states_abbr:
+    if state in states_names or state.upper() in states_abbr:
         print("Input state is valid")
         return True
     print("Input state is invalid")
