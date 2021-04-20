@@ -37,12 +37,18 @@
     margin-bottom: 14px;
 }
 #logreg-forms .social-btn{
-    margin-left: 50px;
+    /* margin-left: 50px; */
     font-weight: 100;
     color:white;
-    width:300px;
+    width:190px;
     font-size: 0.9rem;
 }
+
+#logreg-forms .button_word {
+    margin-left: 40px;
+    width: 300px;
+}
+
 
 #logreg-forms a{
     display: block;
