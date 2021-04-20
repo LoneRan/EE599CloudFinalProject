@@ -10,7 +10,6 @@ def home():
 
     return render_template("index.html")
 
-
 @app.route('/about')
 def form():
     
@@ -20,3 +19,8 @@ def form():
 def data():
     
     return render_template('data.html')
+
+@app.route('/login')
+def login():
+    
+    return render_template('login.html')
