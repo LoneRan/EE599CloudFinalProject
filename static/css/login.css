@@ -61,6 +61,9 @@
     border:1px solid red;
 }
 
+.error_message {
+    color: #DF4B3B;
+}
 
 #logreg-forms button[type="submit"]{ margin-top:10px; }
 
