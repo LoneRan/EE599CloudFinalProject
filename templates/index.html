@@ -21,6 +21,11 @@
   <!-- Custom styles for this template -->
   <link href="{{ url_for('static', filename='css/landing-page.min.css')}}" rel="stylesheet">
 
+  <style type="text/css">
+    .myb {
+        margin: 5px;
+    }
+  </style>
 </head>
 
 <body>
@@ -28,12 +33,16 @@
   <!-- Navigation -->
   <nav class="navbar navbar-light bg-light static-top">
     <div class="container">
-      <a class="navbar-brand" href="#">Travel Planner</a>
-      {% if data == 1 %}
-        <a class="btn btn-primary" href="#">Profile</a>
+      <a class="navbar-brand" href="/">Travel Planner</a> 
+      <div class="col-sm"></div>
+      <div class="col-sm"></div>
+      {% if data is defined %}
+        <a class="btn btn-primary myb" href="/profile/{{data}}">Profile</a>
+        <a class="btn btn-primary myb" href="/">Sign Out</a>
       {% else %}
-        <a class="btn btn-primary" href="login">Sign In</a>
+        <a class="btn btn-primary myb" href="login">Sign In</a> 
       {% endif %}
+      
     </div>
   </nav>
 

@@ -48,11 +48,16 @@ def login():
 def loginCheck():
     email = request.args['email']
     password = request.args['pass']
-    print(email)
-    if password == '0':
-        return render_template('login.html')
-    else:
-        data = 1
-        return render_template("index.html",data=data)
+    # print(email)
+    if password == '0': #login not successfully
+        return render_template('login.html',data=1)
+    else:    #login successfully
+        return render_template("index.html",data=email)
 
-# @app.route('/profile')
+@app.route('/profile/<name>', methods=['POST','GET'])
+def profile(name): #name is user's info
+    prefix = name.split('@')[0]
+    data = [prefix,name]
+    if request.method == 'POST':
+        return render_template("index.html",data=name)
+    return render_template("profile.html", data=data)

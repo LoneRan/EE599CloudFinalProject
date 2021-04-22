@@ -28,7 +28,9 @@
             
 
             <button class="btn btn-success btn-block" type="submit"><i class="fas fa-sign-in-alt"></i> Sign in</button>
-            <!-- <div class="error_message">Incorrect credential</div> -->
+            {% if data == 1 %}
+                <div class="error_message">Incorrect credential</div>
+            {% endif %}
             <a href="#" id="forgot_pswd">Forgot password?</a>
             <hr>
             <!-- <p>Don't have an account!</p>  -->
