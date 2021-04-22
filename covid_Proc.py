@@ -2,7 +2,9 @@ import json
 import requests
 from datetime import datetime, timedelta
 import pandas as pd
-
+import mysql.connector
+from os import path
+from sqlalchemy import create_engine
 # StateCodeMetaData = requests.get('https://api.covidtracking.com/v2/states.json').json()['data']
 # StateCode = []
 # for dic in StateCodeMetaData:
@@ -18,6 +20,8 @@ import pandas as pd
 #print(output_data['CA'])
 #def getSevenByState(state):
     #first get today's date
+
+
 states_names = ["Alabama","Alaska","Arizona","Arkansas","California","Colorado",
                 "Connecticut","District of Columbia","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois",
                 "Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland",
@@ -32,6 +36,30 @@ states_abbr = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DC", "DE", "FL", "GA",
                 "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", 
                 "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", 
                 "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
+
+file_path = "./config/mysql.json"
+host_id = ""
+user_id = ""
+password_id = ""
+if(path.exists(file_path) == False):
+     exit(2)
+
+f = open("./config/mysql.json")
+data = json.load(f)
+host_id = data['host']
+user_id = data['user']
+password_id = data['pass']
+db = mysql.connector.connect(
+    host=host_id,
+    user=user_id,
+    password=password_id
+)
+# cursor = db.cursor()
+# cursor.execute("show databases")
+# print(cursor.fetchall())
+
+engine = create_engine("mysql+pymysql://admin:ee599final@ee599db.cs9tlndyzuyd.us-west-2.rds.amazonaws.com:3306/coviddb",pool_size =1)
+engine.connect()
 
 
 def getYesterday(s):
@@ -79,28 +107,13 @@ state_names = []
 for state in StateCode:
     state_names.append(state.upper())
 df = pd.DataFrame({'state_name':state_names})
-print(df)
+
 today = '2020-08-10'
 for i in range(7):
     today = getYesterday(today)
     # df.join(getTodayCases(today))
     df = pd.concat([df, getTodayCases(today)], axis=1)
 print(df)
-# for state in StateCode:
-#     # print(state.upper())
-#     data = []
-#     data.append(state.upper())
-#     today = '2020-08-10'
-#     for i in range(7):
-#         yesterday = getYesterday(today)
-#         print(yesterday)
-#         data.append(getSevenByState('CA',yesterday))
-# data = []
-# data.append('CA')
-# today = '2020-08-10'
-# for i in range(7):
-#     yesterday = today
-#     yesterday = getYesterday(yesterday)
-#     print(yesterday)
-#     data.append(getSevenByState('CA',yesterday))
-# print(data)
+
+df.to_sql('covid_trend',con=engine,if_exists='replace',index=False)
+engine.dispose()
