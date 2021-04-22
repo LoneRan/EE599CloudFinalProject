@@ -35,7 +35,11 @@ def searchState():
         
         isGuess = True
     
-    return render_template('result.html', stateName = stateName, guessName = guessName, isGuess = isGuess)
+    labels = [1,2,3,4,5,6,7]
+    data = [243,465,878,787,766,988,890]
+
+    return render_template('result.html', 
+        stateName = stateName, guessName = guessName, isGuess = isGuess,labels=labels,data=data)
 
 
 @app.route('/login',methods=['POST','GET'])
