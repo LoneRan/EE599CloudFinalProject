@@ -3,8 +3,50 @@ import requests
 import json
 from helper import guessState
 import userProfile
+
+import mysql.connector
+from os import path
+
 app = Flask(__name__)
 CHECK = 0
+
+######### connect to database
+file_path = "./config/mysql.json"
+host_id = ""
+user_id = ""
+password_id = ""
+if(path.exists(file_path) == False):
+     exit(2)
+
+f = open("./config/mysql.json")
+data = json.load(f)
+host_id = data['host']
+user_id = data['user']
+password_id = data['pass']
+db = mysql.connector.connect(
+    host=host_id,
+    user=user_id,
+    password=password_id
+)
+cursor = db.cursor()
+######### database connection
+
+states_names = ["Alabama","Alaska","Arizona","Arkansas","California","Colorado",
+                "Connecticut","District of Columbia","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois",
+                "Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland",
+                "Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana",
+                "Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York",
+                "North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania",
+                "Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah",
+                "Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"]
+
+states_abbr = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DC", "DE", "FL", "GA", 
+                "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", 
+                "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", 
+                "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", 
+                "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
+states_names_upper = [x.upper() for x in states_names]
+state_dict = dict(zip(states_names_upper, states_abbr))
 
 
 @app.route("/")
@@ -28,13 +70,29 @@ def searchState():
     stateName = request.form['stateName']
     print(stateName)
     guessName = guessState(stateName)
+
     isGuess = False
+    # check if we need to guess what user means
     if guessName != stateName:
         
         isGuess = True
     
+    proc_name = guessName.upper()
+    if proc_name not in states_abbr:
+        proc_name = state_dict[proc_name]
+    query = "SELECT * FROM coviddb.covid_trend WHERE state_name='%s'" %(proc_name)
+    cursor.execute(query)
+
+    data_raw = cursor.fetchall()
+    print(data_raw)
+
     labels = [1,2,3,4,5,6,7]
-    data = [243,465,878,787,766,988,890]
+    data = []
+    if len(data_raw) != 0:
+        data = data_raw[0][1:]
+        data = list(data)
+        print(data)
+    
 
     return render_template('result.html', 
         stateName = stateName, guessName = guessName, isGuess = isGuess,labels=labels,data=data)
