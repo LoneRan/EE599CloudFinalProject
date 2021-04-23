@@ -70,17 +70,38 @@
     margin-bottom: 1rem;
 }
 
+#parent {
+    list-style: none;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+	overflow-y: hidden;
+}
+
+#parent > li {
+    display: inline-block;
+    width: 45%;
+    height: 50%;
+    background-color: rgb(255, 255, 255);
+}
+
+#parent > li:nth-child(even) {
+    background-color: rgb(255, 255, 255);
+}
 
     </style>
 </head>
 <body>
 <div class="container">
 <div class="row gutters">
-<div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+<div class="col-xl-4 col-lg-3 col-md-12 col-sm-12 col-12">
 <div class="card h-100">
-	<form action="" method="post">
-		<input type="submit" name="Home" value="Home" />
-	</form>
+	<div>
+		<form method="POST">
+			<button class="btn btn-primary" type="submit" name="Home">Home</button>
+		</form>
+	</div>
 	<!-- <button type="submit" id="myButton" name="submit" class="btn btn-primary">Home</button> -->
 	<!-- <script type="text/javascript">
 		document.getElementById("myButton").onclick = function () {
@@ -98,82 +119,94 @@
 			</div>
 			<div class="about">
 				<h5>About</h5>
-				<p>I'm {{ data[0] }}. I love travelling</p>
+				<p>I'm {{ data[0] }}. I love travelling.</p>
+				<h5>Infos</h5>
+				{% for t in data[2] %}
+					<ul id="parent" class="text-left">
+						<li style="font-size: 1rem">{{ t[0] }}:</li>
+						<li style="font-size: 1rem">{{ t[1] }}</li>
+					</ul>
+				{% endfor %}
 			</div>
 		</div>
 	</div>
 </div>
 </div>
-<div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+<div class="col-xl-8 col-lg-9 col-md-12 col-sm-12 col-12">
 <div class="card h-100">
-	<div class="card-body">
-		<div class="row gutters">
-			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<h6 class="mb-2 text-primary">Personal Details</h6>
-			</div>
-			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-				<div class="form-group">
-					<label for="fullName">Full Name</label>
-					<input type="text" class="form-control" id="fullName" placeholder="Enter full name">
+	<form method="POST">
+		<div class="card-body">
+			<div class="row gutters">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<h6 class="mb-2 text-primary">Personal Details</h6>
+					{% if data[3] is defined %}
+						<h7 class="mb-2 text-success">Successfully Updated</h7>
+					{% endif %}
+				</div>
+				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+					<div class="form-group">
+						<label for="fname">First Name</label>
+						<input type="text" class="form-control" id="fullName" name="fname" placeholder="Enter first name">
+					</div>
+				</div>
+				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+					<div class="form-group">
+						<label for="lname">Last Name</label>
+						<input type="text" class="form-control" id="fullName" name="lname" placeholder="Enter last name">
+					</div>
+				</div>
+				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+					<div class="form-group">
+						<label for="phone">Phone</label>
+						<input type="text" class="form-control" id="phone" name="phone" placeholder="Enter phone number">
+					</div>
+				</div>
+				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+					<div class="form-group">
+						<label for="website">Favorite travel destination</label>
+						<input type="text" class="form-control" id="fullName" name="travel" placeholder="Enter favorite spot">
+					</div>
 				</div>
 			</div>
-			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-				<div class="form-group">
-					<label for="eMail">Email</label>
-					<input type="email" class="form-control" id="eMail" placeholder="Enter email ID">
+			<div class="row gutters">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<h6 class="mt-3 mb-2 text-primary">Address</h6>
+				</div>
+				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+					<div class="form-group">
+						<label for="Street">Street</label>
+						<input type="name" class="form-control" id="Street" name="street" placeholder="Enter Street">
+					</div>
+				</div>
+				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+					<div class="form-group">
+						<label for="ciTy">City</label>
+						<input type="name" class="form-control" id="ciTy" name="city" placeholder="Enter City">
+					</div>
+				</div>
+				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+					<div class="form-group">
+						<label for="sTate">State</label>
+						<input type="text" class="form-control" id="sTate" name="states" placeholder="Enter State">
+					</div>
+				</div>
+				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+					<div class="form-group">
+						<label for="zIp">Zip Code</label>
+						<input type="text" class="form-control" id="zIp" name="zipcode" placeholder="Zip Code">
+					</div>
 				</div>
 			</div>
-			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-				<div class="form-group">
-					<label for="phone">Phone</label>
-					<input type="text" class="form-control" id="phone" placeholder="Enter phone number">
-				</div>
-			</div>
-			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-				<div class="form-group">
-					<label for="website">Website URL</label>
-					<input type="url" class="form-control" id="website" placeholder="Website url">
+			<div class="row gutters">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<div class="text-right">
+						<button type="submit" id="submit" name="cancel" class="btn btn-secondary">Cancel</button>
+						<button type="submit" id="submit" name="submit" class="btn btn-primary">Update</button>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="row gutters">
-			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<h6 class="mt-3 mb-2 text-primary">Address</h6>
-			</div>
-			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-				<div class="form-group">
-					<label for="Street">Street</label>
-					<input type="name" class="form-control" id="Street" placeholder="Enter Street">
-				</div>
-			</div>
-			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-				<div class="form-group">
-					<label for="ciTy">City</label>
-					<input type="name" class="form-control" id="ciTy" placeholder="Enter City">
-				</div>
-			</div>
-			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-				<div class="form-group">
-					<label for="sTate">State</label>
-					<input type="text" class="form-control" id="sTate" placeholder="Enter State">
-				</div>
-			</div>
-			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-				<div class="form-group">
-					<label for="zIp">Zip Code</label>
-					<input type="text" class="form-control" id="zIp" placeholder="Zip Code">
-				</div>
-			</div>
-		</div>
-		<div class="row gutters">
-			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<div class="text-right">
-					<button type="button" id="submit" name="submit" class="btn btn-secondary">Cancel</button>
-					<button type="button" id="submit" name="submit" class="btn btn-primary">Update</button>
-				</div>
-			</div>
-		</div>
-	</div>
+	</form>
 </div>
 </div>
 </div>

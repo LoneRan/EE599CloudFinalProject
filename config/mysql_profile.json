@@ -1,0 +1,7 @@
+{
+    "host": "ee599db.cs9tlndyzuyd.us-west-2.rds.amazonaws.com",
+    "port": "3306",
+    "user": "admin",
+    "pass": "ee599final",
+    "db":"user"
+}
