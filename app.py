@@ -62,7 +62,7 @@ def form():
 @app.route('/contact')
 def data():
 
-    return render_template('data.html')
+    return render_template('result_cp.html')
 
 
 @app.route('/searchState', methods=['POST'])
