@@ -56,23 +56,22 @@ def login():
         fullname = request.form['fullname']
         email = request.form['email']
         password = request.form['pass']
+        repeatpass = request.form['repeatpass']
+        if password!=repeatpass:
+            return render_template('login.html',data=6) #two password entered are not same!
         fname, lname = fullname.strip().split(' ')
         if userProfile.checkDupProfile(email): #check whether email has been used for registration
-            return render_template('login.html',data=3)
+            return render_template('login.html',data=3) #email is used!
         userProfile.register(fname, lname, email, password) #update db for registration
         return render_template('login.html',data=2)
-        # print(request.form)
+    if request.method == 'GET' and len(request.args) > 0:
+        email = request.args['email']
+        password = request.args['pass']
+        if not userProfile.checkCredential(email, password): #login not successfully
+            return render_template('login.html',data=1)
+        else:    #login successfully
+            return render_template("index.html",data=email) #this email is the username, cannot be changed
     return render_template('login.html')
-
-#check login condition
-@app.route('/login/check',methods=['GET'])
-def loginCheck():
-    email = request.args['email']
-    password = request.args['pass']
-    if not userProfile.checkCredential(email, password): #login not successfully
-        return render_template('login.html',data=1)
-    else:    #login successfully
-        return render_template("index.html",data=email) #this email is the username, cannot be changed
 
 @app.route('/profile/<username>', methods=['POST','GET'])
 def profile(username): #name is user's info
