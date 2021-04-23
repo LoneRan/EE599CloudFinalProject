@@ -1,0 +1,1 @@
+mysql -h ee599db.cs9tlndyzuyd.us-west-2.rds.amazonaws.com --protocol=TCP --port=3306 -uadmin -pee599final < sqlSchema/user.sql
