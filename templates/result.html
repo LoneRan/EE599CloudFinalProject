@@ -8,7 +8,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Clean Blog - Search Result</title>
+  <title>{{guessName}} Search Result</title>
 
   <!-- Bootstrap core CSS -->
   <link href="static/css/bootstrap.min.css" rel="stylesheet">
@@ -99,7 +99,7 @@
                 options: {
                     title: {
                     display: true,
-                    text: 'Seven days average'
+                    text: '7 days average'
                     }
                 }
                 });
@@ -108,7 +108,7 @@
           <p class="post-meta">Posted by
             <a href="https://covidtracking.com/data/api/version-2
 ">Covid tracking</a>
-            on September 8, 2020</p>
+            on Feb 10, 2021</p>
         </div>
         <hr>
         
@@ -134,16 +134,24 @@
                 options: {
                     title: {
                     display: true,
-                    text: 'Seven days average'
+                    text: '30 days average'
                     }
                 }
                 });
             </script>
           <p class="post-meta">Posted by
-            <a href="#">TODO</a>
-            on TODO</p>
+            <a href="https://covidtracking.com/data/api/version-2
+">Covid tracking</a>
+            on Feb 10, 2021</p>
         </div>
         <hr>
+        <div class="post-preview">
+            <h2 class="post-title">
+              Covid cases next day would be around
+              <span class="text-primary">{{covid_next}}</span>
+            </h2>      
+        </div>
+
         <div class="post-preview">
           <a href="post.html">
             <h2 class="post-title">

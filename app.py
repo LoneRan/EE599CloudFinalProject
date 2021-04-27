@@ -6,6 +6,7 @@ import userProfile
 
 import mysql.connector
 from os import path
+from covid_pred import predict_next
 
 app = Flask(__name__)
 CHECK = 0
@@ -109,12 +110,13 @@ def searchState():
         data_covid_30 = data_raw_30[0][1:]
         data_covid_30 = list(data_covid_30)
         print(data_covid_30)
-    
+    covid_next = predict_next(data_covid_30)
 
     return render_template('result.html', 
         stateName = stateName, guessName = guessName, isGuess = isGuess,
         labels=labels,data_covid=data_covid,
-        labels_30=labels_30,data_covid_30=data_covid_30)
+        labels_30=labels_30,data_covid_30=data_covid_30,
+        covid_next = (int)(covid_next))
 
 
 @app.route('/login',methods=['POST','GET'])
