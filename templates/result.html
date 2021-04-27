@@ -80,7 +80,7 @@
         <div class="post-preview">
           
             <h2 class="post-title">
-              Increasing cases in recent seven days 
+              Increasing cases in recent 7 days 
             </h2>
             <canvas id="line-chart" width="300px" height="200px"></canvas>
             <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
@@ -114,14 +114,31 @@
         
     
         <div class="post-preview">
-          <a href="post.html">
-            <h2 class="post-title">
-              TODO
+          <h2 class="post-title">
+              Increasing cases in recent 30 days 
             </h2>
-            <h3 class="post-subtitle">
-              TODO
-            </h3>
-          </a>
+            <canvas id="line-chart-30" width="300px" height="200px"></canvas>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+            <script>
+                new Chart(document.getElementById("line-chart-30"), {
+                type: 'line',
+                data: {
+                    labels: {{ labels_30|safe }},
+                    datasets: [{ 
+                        data: {{ data_covid_30|safe }},
+                        label: "number",
+                        borderColor: "#3e95cd",
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                    display: true,
+                    text: 'Seven days average'
+                    }
+                }
+                });
+            </script>
           <p class="post-meta">Posted by
             <a href="#">TODO</a>
             on TODO</p>
