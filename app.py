@@ -87,15 +87,15 @@ def searchState():
     print(data_raw)
 
     labels = [1,2,3,4,5,6,7]
-    data = []
+    data_covid = []
     if len(data_raw) != 0:
-        data = data_raw[0][1:]
-        data = list(data)
-        print(data)
+        data_covid = data_raw[0][1:]
+        data_covid = list(data_covid)
+        print(data_covid)
     
 
     return render_template('result.html', 
-        stateName = stateName, guessName = guessName, isGuess = isGuess,labels=labels,data=data)
+        stateName = stateName, guessName = guessName, isGuess = isGuess,labels=labels,data_covid=data_covid)
 
 
 @app.route('/login',methods=['POST','GET'])
