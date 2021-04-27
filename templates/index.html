@@ -36,8 +36,9 @@
       <a class="navbar-brand" href="/">Travel Planner</a> 
       <div class="col-sm"></div>
       <div class="col-sm"></div>
-      {% if data is defined %}
-        <a class="btn btn-primary myb" href="/profile/{{data}}">Profile</a>
+      {% if login is defined %}
+        <!-- <a class="btn btn-primary myb" href="#">{{login}}</a> -->
+        <a class="btn btn-primary myb" href="/profile/{{login}}">Profile</a>
         <a class="btn btn-primary myb" href="/">Sign Out</a>
       {% else %}
         <a class="btn btn-primary myb" href="login">Sign In</a> 

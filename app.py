@@ -11,6 +11,10 @@ from covid_pred import predict_next
 app = Flask(__name__)
 CHECK = 0
 
+#global vairable for login status
+global LOGIN_STATUS
+LOGIN_STATUS=None
+# print(GLOBAL_LOGIN_STATUS)
 ######### connect to database
 file_path = "./config/mysql.json"
 host_id = ""
@@ -149,7 +153,8 @@ def login():
         if not userProfile.checkCredential(email, password): #login not successfully
             return render_template('login.html',data=1)
         else:    #login successfully
-            return render_template("index.html",data=email) #this email is the username, cannot be changed
+            LOGIN_STATUS=email
+            return render_template("index.html", login=LOGIN_STATUS) #this email is the username, cannot be changed
     return render_template('login.html')
 
 @app.route('/profile/<username>', methods=['POST','GET'])
@@ -159,7 +164,7 @@ def profile(username): #name is user's info
     data = [fname,username,userData]
     if request.method == 'POST':
         if 'Home' in request.form:
-            return render_template("index.html",data=username)
+            return render_template("index.html",login=LOGIN_STATUS)
         elif 'submit' in request.form:
             userProfile.updateProfile(request.form,username)
             data[0] = userProfile.getFirstName(username)
