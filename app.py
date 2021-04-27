@@ -6,6 +6,7 @@ import userProfile
 
 import mysql.connector
 from os import path
+from covid_pred import predict_next
 
 app = Flask(__name__)
 CHECK = 0
@@ -49,6 +50,8 @@ states_names_upper = [x.upper() for x in states_names]
 state_dict = dict(zip(states_names_upper, states_abbr))
 
 
+
+
 @app.route("/")
 def home():
     
@@ -80,6 +83,8 @@ def searchState():
     proc_name = guessName.upper()
     if proc_name not in states_abbr:
         proc_name = state_dict[proc_name]
+
+    
     query = "SELECT * FROM coviddb.covid_trend WHERE state_name='%s'" %(proc_name)
     cursor.execute(query)
 
@@ -87,15 +92,31 @@ def searchState():
     print(data_raw)
 
     labels = [1,2,3,4,5,6,7]
-    data = []
+    data_covid = []
     if len(data_raw) != 0:
-        data = data_raw[0][1:]
-        data = list(data)
-        print(data)
+        data_covid = data_raw[0][1:]
+        data_covid = list(data_covid)
+        print(data_covid)
     
+    query_30 = "SELECT * FROM coviddb.covid_data_30 WHERE state_name='%s'" %(proc_name)
+    cursor.execute(query_30)
+
+    data_raw_30 = cursor.fetchall()
+    print(data_raw_30)
+
+    labels_30 = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
+    data_covid_30 = []
+    if len(data_raw_30) != 0:
+        data_covid_30 = data_raw_30[0][1:]
+        data_covid_30 = list(data_covid_30)
+        print(data_covid_30)
+    covid_next = predict_next(data_covid_30)
 
     return render_template('result.html', 
-        stateName = stateName, guessName = guessName, isGuess = isGuess,labels=labels,data=data)
+        stateName = stateName, guessName = guessName, isGuess = isGuess,
+        labels=labels,data_covid=data_covid,
+        labels_30=labels_30,data_covid_30=data_covid_30,
+        covid_next = (int)(covid_next))
 
 
 @app.route('/login',methods=['POST','GET'])

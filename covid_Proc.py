@@ -83,6 +83,7 @@ def getTodayCases(today):
     print(request_form)
     for state in StateCode:
         r = requests.get(request_form.format(state)).json()
+        
         output_data[state.upper()] = r['data']
     
     res = []
@@ -108,7 +109,8 @@ for state in StateCode:
     state_names.append(state.upper())
 df = pd.DataFrame({'state_name':state_names})
 
-today = '2020-08-10'
+
+today = '2020-02-11'
 for i in range(7):
     today = getYesterday(today)
     # df.join(getTodayCases(today))
@@ -117,3 +119,18 @@ print(df)
 
 df.to_sql('covid_trend',con=engine,if_exists='replace',index=False)
 engine.dispose()
+
+
+
+df_pred = pd.DataFrame({'state_name':state_names})
+def saveThirtyDays():
+    today = '2021-02-11'
+    for i in range(30):
+        today = getYesterday(today)
+        # df.join(getTodayCases(today))
+        df_pred = pd.concat([df_pred, getTodayCases(today)], axis=1)
+        print(df_pred)
+    print(df_pred)
+
+    df_pred.to_sql('covid_data_30',con=engine,if_exists='replace',index=False)
+    engine.dispose()
