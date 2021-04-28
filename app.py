@@ -100,7 +100,7 @@ def searchState():
         data_covid = data_raw[0][1:]
         data_covid = list(data_covid)
         print(data_covid)
-    
+    data_covid.reverse()
     query_30 = "SELECT * FROM coviddb.covid_data_30 WHERE state_name='%s'" %(proc_name)
     cursor.execute(query_30)
 
@@ -113,6 +113,7 @@ def searchState():
         data_covid_30 = data_raw_30[0][1:]
         data_covid_30 = list(data_covid_30)
         print(data_covid_30)
+    data_covid_30.reverse()
     covid_next = predict_next(data_covid_30)
 
     avg_seven = 0

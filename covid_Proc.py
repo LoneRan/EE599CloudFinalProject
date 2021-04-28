@@ -82,13 +82,20 @@ def getTodayCases(today):
     request_form = 'https://api.covidtracking.com/v2/states/{}/' + today + '.json'
     print(request_form)
     for state in StateCode:
+        # print(request_form.format(state))
         r = requests.get(request_form.format(state)).json()
-        
-        output_data[state.upper()] = r['data']
-    
+        # print(r)
+        if('error' in r):
+            output_data[state.upper()]= 0
+        else:
+            output_data[state.upper()] = r['data']
+    # print(output_data)
     res = []
     for state in StateCode:
-        res.append(output_data[state.upper()]['cases']['total']['calculated']['change_from_prior_day'])
+        if output_data[state.upper()]== 0:
+            res.append(0)
+        else:
+            res.append(output_data[state.upper()]['cases']['total']['calculated']['change_from_prior_day'])
     # print(json.dumps(output_data[st],indent=4))
     ret = pd.DataFrame({today:res})
     return ret
@@ -110,7 +117,7 @@ for state in StateCode:
 df = pd.DataFrame({'state_name':state_names})
 
 
-today = '2020-02-11'
+today = '2021-02-11'
 for i in range(7):
     today = getYesterday(today)
     # df.join(getTodayCases(today))
@@ -119,6 +126,7 @@ print(df)
 
 df.to_sql('covid_trend',con=engine,if_exists='replace',index=False)
 engine.dispose()
+# print(getTodayCases('2021-02-11'))
 
 
 
