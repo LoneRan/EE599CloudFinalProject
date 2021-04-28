@@ -75,6 +75,25 @@
 
   <!-- Main Content -->
   <div class="container">
+  {%if avg_seven < 1000%}
+  <div class="alert alert-success">
+    <strong>Low risk!</strong> Okay to travel but still follow the rules tighly.
+  </div>
+  {%else%}
+  
+  {%if avg_seven < 5000 %}
+  <div class="alert alert-warning">
+    <strong>Moderate risk!</strong> We recommend you avoid unnessary travel.
+  </div>
+  {%endif%}
+  {%endif%}
+
+  {%if avg_seven >= 5000%}
+  <div class="alert alert-danger">
+    <strong>High risk!</strong> We strongly recommend you not to travel!
+  </div>
+  {%endif%}
+
     <div class="row">
       <div class="col-lg-8 col-md-10 mx-auto">
         <div class="post-preview">

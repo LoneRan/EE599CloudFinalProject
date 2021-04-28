@@ -115,6 +115,9 @@ def searchState():
         print(data_covid_30)
     covid_next = predict_next(data_covid_30)
 
+    avg_seven = 0
+    for i in data_covid:
+        avg_seven = avg_seven + i/7
     #if login, check whether user has already added the state to wishlist
     #this is used to control add/delete from wishlist button
     isWish = False
@@ -125,7 +128,9 @@ def searchState():
         stateName = stateName, guessName = guessName, isGuess = isGuess,
         labels=labels,data_covid=data_covid,
         labels_30=labels_30,data_covid_30=data_covid_30,
-        covid_next = (int)(covid_next), login=session, isWish=isWish)
+        covid_next = (int)(covid_next), 
+        avg_seven = avg_seven,
+        login=session, isWish=isWish)
 
 
 @app.route('/login',methods=['POST','GET'])
