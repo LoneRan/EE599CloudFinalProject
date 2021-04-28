@@ -84,7 +84,7 @@ def updateProfile(form, username):
 	for k,v in zip(key,value):
 		if v!='""':
 			l.append(k+'='+v)
-	print(l)
+	# print(l)
 	update = ','.join(l)
 	query = 'update profiles set ' + update + ' where user_id = (select user_id from credentials where username = "{}");'.format(username)
 	execute(query)
@@ -102,11 +102,27 @@ def generateInfo(username):
 			key = key[0].upper() + key[1:]
 			val = val[0].upper() + val[1:]
 			userData.append((key,val))
-	return userData;
+	query = f'select * from wishlist where username = "{username}"'
+	wishlist = readdb(query)
+	return [userData, wishlist]
 
 def updatePassword(username,password):
 	query = 'update credentials set pass="{}" where username="{}"'.format(password,username)
 	execute(query)
+
+def addWishlist(username, wishstate): #add wishlist
+	query = f'insert into wishlist(username, wish) VALUES("{username}","{wishstate}")'
+	execute(query)
+
+def deleteWishlist(username,wishstate): 
+	query = f'delete from wishlist where username="{username}" and wish="{wishstate}"'
+	execute(query)
+	
+
+def checkWish(username,guessName):
+	query = f'select * from wishlist where username = "{username}" and wish = "{guessName}"'	
+	result = readdb(query)
+	return len(result) > 0
 
 global_conn = MySQLConnection(**read_db_config())
 global_cursor = global_conn.cursor(dictionary=True)

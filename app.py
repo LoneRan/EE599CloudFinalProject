@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, Response
+from flask import Flask, render_template, request, redirect, url_for, Response, session
 import requests
 import json
 from helper import guessState
@@ -9,12 +9,9 @@ from os import path
 from covid_pred import predict_next
 
 app = Flask(__name__)
+app.secret_key = 'any random string'
 CHECK = 0
 
-#global vairable for login status
-global LOGIN_STATUS
-LOGIN_STATUS=None
-# print(GLOBAL_LOGIN_STATUS)
 ######### connect to database
 file_path = "./config/mysql.json"
 host_id = ""
@@ -58,8 +55,10 @@ state_dict = dict(zip(states_names_upper, states_abbr))
 
 @app.route("/")
 def home():
-    
-    return render_template("index.html")
+    # 
+    # session.pop('username', None)
+    # print(session)
+    return render_template("index.html",login=session)
 
 @app.route('/about')
 def form():
@@ -72,7 +71,7 @@ def data():
     return render_template('result_cp.html')
 
 
-@app.route('/searchState', methods=['POST'])
+@app.route('/searchState', methods=['POST','GET'])
 def searchState():
     stateName = request.form['stateName']
     print(stateName)
@@ -116,11 +115,17 @@ def searchState():
         print(data_covid_30)
     covid_next = predict_next(data_covid_30)
 
+    #if login, check whether user has already added the state to wishlist
+    #this is used to control add/delete from wishlist button
+    isWish = False
+    if 'username' in session:
+        isWish = userProfile.checkWish(session['username'], guessName)
+
     return render_template('result.html', 
         stateName = stateName, guessName = guessName, isGuess = isGuess,
         labels=labels,data_covid=data_covid,
         labels_30=labels_30,data_covid_30=data_covid_30,
-        covid_next = (int)(covid_next))
+        covid_next = (int)(covid_next), login=session, isWish=isWish)
 
 
 @app.route('/login',methods=['POST','GET'])
@@ -153,25 +158,34 @@ def login():
         if not userProfile.checkCredential(email, password): #login not successfully
             return render_template('login.html',data=1)
         else:    #login successfully
-            LOGIN_STATUS=email
-            return render_template("index.html", login=LOGIN_STATUS) #this email is the username, cannot be changed
+            session['username'] =email
+            return render_template("index.html", login=session) #this email is the username, cannot be changed
     return render_template('login.html')
 
 @app.route('/profile/<username>', methods=['POST','GET'])
 def profile(username): #name is user's info
     fname = userProfile.getFirstName(username)
-    userData = userProfile.generateInfo(username)
-    data = [fname,username,userData]
+    userData, wishlist = userProfile.generateInfo(username)
+    data = [fname,username,userData,wishlist]
     if request.method == 'POST':
         if 'Home' in request.form:
-            return render_template("index.html",login=LOGIN_STATUS)
+            return render_template("index.html", login=session)
         elif 'submit' in request.form:
             userProfile.updateProfile(request.form,username)
             data[0] = userProfile.getFirstName(username)
-            data[2] = userProfile.generateInfo(username)
-            data.append(1)
-            return render_template("profile.html", data=data)
-            # query = 'update profiles  '
-        elif 'cancel' in request.form:
-            return render_template("profile.html", data=data)
+            data[2],data[3] = userProfile.generateInfo(username)
     return render_template("profile.html", data=data)
+
+@app.route('/wishlist/<username>', methods=['POST','GET'])
+def wishlist(username):
+    # print(request.form)
+    if 'delete' in request.form:
+        userProfile.deleteWishlist(username,request.args['state'])
+    elif 'add' in request.form:
+        userProfile.addWishlist(username,request.args['state'])
+    
+    return redirect(f'/profile/{username}')
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return render_template("index.html", login=session)

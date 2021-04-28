@@ -25,3 +25,10 @@ CREATE TABLE credentials (
   PRIMARY KEY (cred_id), 
   FOREIGN KEY (user_id) REFERENCES profiles(user_id) ON DELETE CASCADE
 );
+
+CREATE TABLE wishlist (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT, 
+  username VARCHAR(20) NOT NULL,
+  wish VARCHAR(20) NOT NULL,
+  PRIMARY KEY (id)
+);

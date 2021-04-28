@@ -36,12 +36,11 @@
       <a class="navbar-brand" href="/">Travel Planner</a> 
       <div class="col-sm"></div>
       <div class="col-sm"></div>
-      {% if login is defined %}
-        <!-- <a class="btn btn-primary myb" href="#">{{login}}</a> -->
-        <a class="btn btn-primary myb" href="/profile/{{login}}">Profile</a>
-        <a class="btn btn-primary myb" href="/">Sign Out</a>
+      {% if session['username'] is defined %}
+        <a class="btn btn-primary myb" href="/profile/{{session['username']}}">Profile</a>
+        <a class="btn btn-primary myb" href="/logout">Sign Out</a> 
       {% else %}
-        <a class="btn btn-primary myb" href="login">Sign In</a> 
+        <a class="btn btn-primary myb" href="login">Sign In</a>
       {% endif %}
       
     </div>
