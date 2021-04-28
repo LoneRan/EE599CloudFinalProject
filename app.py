@@ -58,7 +58,11 @@ def home():
     # 
     # session.pop('username', None)
     # print(session)
-    return render_template("index.html",login=session)
+    q = "SELECT state_name, average FROM coviddb.covid_trend ORDER BY average DESC LIMIT 5"
+    cursor.execute(q)
+    data_raw = cursor.fetchall()
+    # print(data_raw[0][0])
+    return render_template("index.html",login=session, top5 = data_raw)
 
 @app.route('/about')
 def form():
@@ -97,7 +101,7 @@ def searchState():
     labels = [1,2,3,4,5,6,7]
     data_covid = []
     if len(data_raw) != 0:
-        data_covid = data_raw[0][1:]
+        data_covid = data_raw[0][1:8]
         data_covid = list(data_covid)
         print(data_covid)
     data_covid.reverse()

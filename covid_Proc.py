@@ -124,6 +124,17 @@ for i in range(7):
     df = pd.concat([df, getTodayCases(today)], axis=1)
 print(df)
 
+average = []
+for i in range(56):
+    temp = 0
+    for j in range(1,8):
+        temp = temp + df.iloc[i,j]
+    temp = (int)(temp/7)
+    average.append(temp)
+
+avg = pd.DataFrame({'average': average})
+df = pd.concat([df, avg], axis=1)
+print(df)
 df.to_sql('covid_trend',con=engine,if_exists='replace',index=False)
 engine.dispose()
 # print(getTodayCases('2021-02-11'))

@@ -133,8 +133,30 @@
     </div>
   </section>
 
-  
-
+  <section class="features-icons bg-light text-center">
+  <h2 class="text-primary">TOP 5 High Risk States</h2>
+  <br>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h2>State</h2>
+      </div>
+      <div class="col">
+        <h2>Average New Cases</h2>
+      </div>
+    </div>
+    {%for row in top5%}
+    <div class="row">
+      <div class="col">
+        <p>{{row[0]}}</p>
+      </div>
+      <div class="col">
+        <p>{{row[1]}}</p>
+      </div>
+    </div>
+    {%endfor%}
+  </div>
+  </section>
   <!-- Call to Action -->
   <section class="call-to-action text-white text-center">
     <div class="overlay"></div>
