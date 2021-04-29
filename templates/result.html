@@ -1,17 +1,313 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Results Page</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/results.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>{{guessName}} Search Result</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="static/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
+  <link href="static/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this template -->
+  <link href="static/css/clean-blog.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
+  <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+  <!--chart.js-->
+  
+  <link href="static/css/styles.css" rel="stylesheet" />
 </head>
+
 <body>
-<div id="weatherResults">
-    <h3>Weather in {{ location }}</h3>
-    <h2>{{ temp }}° F</h2>
-    <h3>{{ weather }}</h3>
-    <h4>Feels like: {{ feels_like }}° F</h4>
-</div>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-light bg-light static-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">Travel Planner</a> 
+      <div class="col-sm"></div>
+      <div class="col-sm"></div>
+      {% if session['username'] is defined %}
+        <a class="btn btn-primary myb" href="/profile/{{session['username']}}">Profile</a>
+        <a class="btn btn-primary myb" href="/logout">Sign Out</a> 
+      {% else %}
+        <a class="btn btn-primary myb" href="login">Sign In</a>
+      {% endif %}
+      
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('static/img/Big-Sur.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="site-heading">
+            {%if isGuess == true%}
+                <h2 style="color: white;">You typed “{{stateName}}”. Did you mean 
+                <span class="text-primary">{{guessName}}</span>
+                </h2>
+                <h4>
+                    <form action="/" method="GET">
+                        <button type="submit" class="btn btn-primary">Go back to homepage</button>
+                    </form>
+                </h4>
+            {%endif%}
+            <h3 style="color: white;">
+                Search results for
+                <span class="text-primary">{{guessName}}</span>
+            </h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+  {%if avg_seven < 1000%}
+  <div class="alert alert-success">
+    <strong>Low risk!</strong> Okay to travel but still follow the rules tighly.
+  </div>
+  {%else%}
+  
+  {%if avg_seven < 5000 %}
+  <div class="alert alert-warning">
+    <strong>Moderate risk!</strong> We recommend you avoid unnessary travel.
+  </div>
+  {%endif%}
+  {%endif%}
+
+  {%if avg_seven >= 5000%}
+  <div class="alert alert-danger">
+    <strong>High risk!</strong> We strongly recommend you not to travel!
+  </div>
+  {%endif%}
+
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <div class="post-preview">
+          
+            <h2 class="post-title">
+              New cases in recent 7 days 
+            </h2>
+            <canvas id="line-chart" width="300px" height="200px"></canvas>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+            <script>
+                new Chart(document.getElementById("line-chart"), {
+                type: 'line',
+                data: {
+                    labels: {{ labels|safe }},
+                    datasets: [{ 
+                        data: {{ data_covid|safe }},
+                        label: "number",
+                        borderColor: "#3e95cd",
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                    display: true,
+                    text: '7 days average'
+                    }
+                }
+                });
+            </script> 
+          
+          <p class="post-meta">Posted by
+            <a href="https://covidtracking.com/data/api/version-2
+">Covid tracking</a>
+            on Feb 10, 2021</p>
+        </div>
+        <hr>
+        
+    
+        <div class="post-preview">
+          <h2 class="post-title">
+              New cases in recent 30 days 
+            </h2>
+            <canvas id="line-chart-30" width="300px" height="200px"></canvas>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+            <script>
+                new Chart(document.getElementById("line-chart-30"), {
+                type: 'line',
+                data: {
+                    labels: {{ labels_30|safe }},
+                    datasets: [{ 
+                        data: {{ data_covid_30|safe }},
+                        label: "number",
+                        borderColor: "#3e95cd",
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                    display: true,
+                    text: '30 days average'
+                    }
+                }
+                });
+            </script>
+          <p class="post-meta">Posted by
+            <a href="https://covidtracking.com/data/api/version-2
+">Covid tracking</a>
+            on Feb 10, 2021</p>
+        </div>
+        <hr>
+        <div class="post-preview">
+            <h2 class="post-title">
+              New cases next day would be around
+              <span class="text-primary">{{covid_next}}</span>
+            </h2>      
+        </div>
+        <hr>
+        <div class="post-preview">
+          <a href="{{policy_url}}">
+            <h2 class="post-title">
+              Click me to check out the recent covid policy
+            </h2>
+            
+            <h3 class="post-subtitle">
+              Check out right now!
+            </h3>
+          </a>
+          
+        </div>
+        <hr>
+
+        <!-- weather widget start -->
+        <div class="weatherWidget" ></div>
+
+          <script>
+            window.weatherWidgetConfig =  window.weatherWidgetConfig || [];
+            window.weatherWidgetConfig.push({
+                selector:".weatherWidget",
+                apiKey:"HYR2PW7CKGB9T9V63X4YTNM2F", //Sign up for your personal key
+                location:{{weather_name|tojson}}, //Enter an address
+                unitGroup:"metric", //"us" or "metric"
+                forecastDays:5, //how many days forecast to show
+                title:{{weather_name|tojson}}, //optional title to show in the 
+                showTitle:true, 
+                showConditions:true
+            });
+            
+            (function() {
+            var d = document, s = d.createElement('script');
+            s.src = 'https://www.visualcrossing.com/widgets/forecast-simple/weather-forecast-widget-simple.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+          </script>
+        <hr>
+        <!-- Pager -->
+        <div class="clearfix">
+        {% if session['username'] is defined %}
+          {% if isWish %}
+            <form action="/wishlist/{{session['username']}}?state={{guessName}}" method="POST">
+              <button class="btn btn-primary float-right" name="delete" type="submit">Delete from Wishlist</button>
+            </form>
+          {% else %}
+            <form action="/wishlist/{{session['username']}}?state={{guessName}}" method="POST">
+              <button class="btn btn-primary float-right" name="add" type="submit">Add to Wishlist</button>
+            </form>
+          {% endif %}
+        {% else %}
+          <a class="btn btn-primary float-right" href="/">Go back to homepage</a>
+        {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Footer -->
+  <footer class="footer bg-light">
+    <div class="container">
+    <div class="row">
+        <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
+        <ul class="list-inline mb-2">
+            <li class="list-inline-item">
+            <a href="/">Home</a>
+            </li>
+            <li class="list-inline-item">&sdot;</li>
+            <li class="list-inline-item">
+            <a href="/about">About</a>
+            </li>
+            <li class="list-inline-item">&sdot;</li>
+            <li class="list-inline-item">
+            <a href="/contact">Contact</a>
+            </li>
+            <li class="list-inline-item">&sdot;</li>
+            <li class="list-inline-item">
+            <a href="#">Terms of Use</a>
+            </li>
+            <li class="list-inline-item">&sdot;</li>
+            <li class="list-inline-item">
+            <a href="#">Privacy Policy</a>
+            </li>
+        </ul>
+        <p class="text-muted small mb-4 mb-lg-0">&copy; Tralvel Planner 2021. All Rights Reserved.</p>
+        </div>
+        <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
+        <ul class="list-inline mb-0">
+            <li class="list-inline-item mr-3">
+            <a href="#">
+                <i class="fab fa-facebook fa-2x fa-fw"></i>
+            </a>
+            </li>
+            <li class="list-inline-item mr-3">
+            <a href="#">
+                <i class="fab fa-twitter-square fa-2x fa-fw"></i>
+            </a>
+            </li>
+            <li class="list-inline-item">
+            <a href="#">
+                <i class="fab fa-instagram fa-2x fa-fw"></i>
+            </a>
+            </li>
+        </ul>
+        </div>
+    </div>
+    </div>
+</footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="static/js/jquery.min.js"></script>
+  <script src="static/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="static/js/clean-blog.min.js"></script>
+
 </body>
+
 </html>
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="background-color: #f5f5f5; height: 100vh">
+    <div class="container h-100">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-sm-12 col-xs-12 pt-5">
+                <div class="card border-0 p-3 shadow-sm text-center">
+                    <h3 class="text-muted">Current Weather For {{ city }}</h3>
+                    <h5 class="lead text-muted">Temperature: {{ temp }} F</h5>
+                    <h5 class="lead text-muted">Humidity: {{ humidity }}%</h5>
+                    <h5 class="lead text-muted">Wind Speed: {{ wind_speed }} mph</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
