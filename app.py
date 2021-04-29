@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, Response, session
-import requests
+import requests, urllib.request
 import json
 from helper import guessState
 import userProfile
@@ -33,6 +33,24 @@ db = mysql.connector.connect(
 cursor = db.cursor()
 ######### database connection
 
+states_policy = ["https://www.alabamapublichealth.gov/covid19/index.html", "http://dhss.alaska.gov/dph/Epi/id/Pages/COVID-19/default.aspx", "https://www.azdhs.gov/covid19/index.php",
+                 "https://www.healthy.arkansas.gov/programs-services/topics/novel-coronavirus", "https://www.cdph.ca.gov/Programs/CID/DCDC/Pages/Immunization/ncov2019.aspx",
+                 "https://covid19.colorado.gov/", "https://portal.ct.gov/Coronavirus", "https://dhss.delaware.gov/dhss/dph/index.html", "https://floridahealthcovid19.gov/",
+                 "https://gov.georgia.gov/executive-action/executive-orders/2021-executive-orders", "https://hawaiicovid19.com/", "https://coronavirus.idaho.gov/governors-actions/",
+                 "http://www.dph.illinois.gov/", "https://www.coronavirus.in.gov/", "https://coronavirus.iowa.gov/?utm_medium=email&utm_source=govdelivery", "https://covid.ks.gov/",
+                 "https://govstatus.egov.com/kycovid19", "https://ldh.la.gov/coronavirus/", "https://www.maine.gov/dhhs/mecdc/infectious-disease/epi/airborne/coronavirus/index.shtml",
+                 "https://coronavirus.maryland.gov/", "https://www.mass.gov/resource/information-on-the-outbreak-of-coronavirus-disease-2019-covid-19", 
+                 "https://www.michigan.gov/coronavirus", "https://www.health.state.mn.us/diseases/coronavirus/index.html", "https://msdh.ms.gov/msdhsite/_static/14,0,420.html", 
+                 "https://health.mo.gov/living/healthcondiseases/communicable/novel-coronavirus/", "https://dphhs.mt.gov/publichealth/cdepi/diseases/coronavirusmt", 
+                 "https://dhhs.ne.gov/Pages/default.aspx", "https://nvhealthresponse.nv.gov/", "https://www.covid19.nh.gov/", "https://covid19.nj.gov/", "https://cv.nmhealth.org/", 
+                 "https://www.governor.ny.gov/news", "https://covid19.ncdhhs.gov/", "https://www.health.nd.gov/diseases-conditions/coronavirus", "https://odh.ohio.gov/wps/portal/gov/odh/home", 
+                 "https://oklahoma.gov/covid19.html", "https://govstatus.egov.com/OR-OHA-COVID-19", "https://www.health.pa.gov/topics/disease/coronavirus/Pages/Coronavirus.aspx", 
+                 "https://health.ri.gov/diseases/respiratory/?parm=163", "https://scdhec.gov/covid19", "https://doh.sd.gov/COVID/", "https://www.tn.gov/health/cedep/ncov.html", 
+                 "https://www.dshs.texas.gov/coronavirus/", "https://coronavirus.utah.gov/", "https://www.healthvermont.gov/covid-19", "https://www.vdh.virginia.gov/coronavirus/",
+                 "https://www.doh.wa.gov/Emergencies/COVID19", "https://dhhr.wv.gov/COVID-19/Pages/default.aspx", "https://www.dhs.wisconsin.gov/outbreaks/index.htm",
+                 "https://health.wyo.gov/publichealth/infectious-disease-epidemiology-unit/disease/novel-coronavirus/"]
+
+
 states_names = ["Alabama","Alaska","Arizona","Arkansas","California","Colorado",
                 "Connecticut","District of Columbia","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois",
                 "Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland",
@@ -63,6 +81,29 @@ def home():
     data_raw = cursor.fetchall()
     # print(data_raw[0][0])
     return render_template("index.html",login=session, top5 = data_raw)
+
+@app.route('/Weather', methods = ['POST', 'GET'])
+def weather():
+    if request.method == 'POST':
+        state_code = request.form['state_code']
+    else:
+        state_code = 'CA'
+    
+    api = "03e8fdf7e4bd0c38e8c16b18799f055e"
+
+    source = urlib.request.urlopen('http://api.openweathermap.org/data/2.5/weather?q =' + state_code + '&appid =' + api).read()
+
+    list_of_data = json.loads(source)
+
+    data = {
+        "country_code": str(list_of_data['sys']['country']),
+        "coordinate": str(list_of_data['coord']['lon']) + ' ' + str(list_of_data['coord']['lat']),
+        "temp": str(list_of_data['main']['temp']) + 'k',
+        "pressure": str(list_of_data['main']['pressure']),
+        "humidity": str(list_of_data['main']['humidity']),
+    }
+    print(data)
+    return render_template('weather.html', data = data)
 
 @app.route('/about')
 def form():
