@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/home.css') }}">
+</head>
+<body>
+<h2>Weather Dashboard in Flask</h2>
+<form id="weatherForm" action="{{ url_for('results') }}" method="post">
+    Location Zip Code: <input id="weatherInput" type="text" name="zipCode"><br>
+    <input id="weatherSubmit" type="submit" value="Submit">
+</form>
+</body>
+</html>
