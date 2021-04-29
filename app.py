@@ -68,6 +68,7 @@ states_abbr = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DC", "DE", "FL", "GA",
 states_names_upper = [x.upper() for x in states_names]
 state_dict = dict(zip(states_names_upper, states_abbr))
 state_dict_reverse = dict(zip(states_abbr, states_names))
+state_policy = dict(zip(states_abbr, states_policy))
 
 
 
@@ -136,6 +137,9 @@ def searchState():
     weather_name = (str)(state_dict_reverse[proc_name])
     print(weather_name)
 
+    # For state policy
+    policy_url = state_policy[proc_name]
+
     query = "SELECT * FROM coviddb.covid_trend WHERE state_name='%s'" %(proc_name)
     cursor.execute(query)
 
@@ -180,6 +184,7 @@ def searchState():
         covid_next = (int)(covid_next), 
         avg_seven = avg_seven,
         weather_name = weather_name,
+        policy_url = policy_url,
         login=session, isWish=isWish)
 
 
