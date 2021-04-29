@@ -207,7 +207,12 @@
 					<h6 class="mt-3 mb-2 text-primary text-left">Wishlist</h6>
 					<ul id="parent" class="text-left"></ul>
 						{% for t in data[3] %}
-								<li style="font-size: 1rem" class="font-weight-bold" >{{ t["wish"] }}</li>
+								<li style="font-size: 1rem" class="font-weight-bold" >{{ t["wish"] }}
+									
+								</li>
+								<form action="{{ url_for('searchState') }}" method="POST">
+									<button type="submit" name="stateName" value="{{ t["wish"] }}" class="btn-link">Check it out!</button>
+								</form>
 						{% endfor %}
 					</ul>
 				</div>
