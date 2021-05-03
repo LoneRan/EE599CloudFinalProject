@@ -1,4 +1,5 @@
 from statsmodels.tsa.ar_model import AutoReg
+from statsmodels.tsa.statespace.sarimax import SARIMAX
 from random import random
 
 # contrived dataset
@@ -6,8 +7,9 @@ from random import random
 # fit model
 
 def predict_next(data):
-    model = AutoReg(data, lags=1)
-    model_fit = model.fit()
+    model = SARIMAX(data, order=(1, 1, 1), seasonal_order=(0, 0, 0, 0))
+    
+    model_fit = model.fit(disp=False)
     # make prediction
     yhat = model_fit.predict(len(data), len(data))
     print(yhat)

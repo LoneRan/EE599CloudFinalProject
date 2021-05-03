@@ -15,8 +15,14 @@ Developed using Flask. Calling API from online source.
 # Requirement
 python3
 flask
+sqlalchemy
+pandas
+numpy
+pymysql
 
-To start flask application: `python3 -m flask run` (if you're using MacOS/Linux)
+- To install all the dependencies, run the command `pip3 install -r requirements.txt`
+
+- Then start flask application: `python3 -m flask run` (if you're using MacOS/Linux)
 
 # How to use
 1. Navigate to `http://localhost:5000`
