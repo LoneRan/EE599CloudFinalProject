@@ -19,15 +19,16 @@ sqlalchemy
 pandas
 numpy
 pymysql
+etc.
 
-- To install all the dependencies, run the command `pip3 install -r requirements.txt`
+- To set up the environments and start the server, run the command `chmod +x start_up.sh`, then run `./start_up`
 
-- Then start flask application: `python3 -m flask run` (if you're using MacOS/Linux)
+- The web application will then run under "0.0.0.0:5000"
 
 # How to use
-1. Navigate to `http://localhost:5000`
-2. ...
+1. Navigate to `http://0.0.0.0:5000`
+2. Sign in/up to our website or direct use search function
 
-# Additional Info
-Bootstrap template URL: https://startbootstrap.com/theme/landing-page
+
+
 
