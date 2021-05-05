@@ -119,8 +119,9 @@ def data():
 
 @app.route('/searchState', methods=['POST','GET'])
 def searchState():
-    stateName = request.form['stateName']
-    print(stateName)
+    # if 'stateName' is not in request.form, the visit come from profile wishlist
+    # else visit comes from the home page
+    stateName = session['stateName'] if ('stateName' not in request.form) else request.form['stateName']
     guessName = guessState(stateName)
 
     isGuess = False
@@ -234,6 +235,10 @@ def profile(username): #name is user's info
             userProfile.updateProfile(request.form,username)
             data[0] = userProfile.getFirstName(username)
             data[2],data[3] = userProfile.generateInfo(username)
+        elif 'stateName' in request.form:
+            # save statename to session so that searchState can use later
+            session['stateName']=request.form['stateName']
+            return redirect("/searchState")
     return render_template("profile.html", data=data)
 
 @app.route('/wishlist/<username>', methods=['POST','GET'])
