@@ -67,44 +67,13 @@ def getTodayCases(today):
 
 # print(getTodayCases('2020-08-10'))
 
-StateCodeMetaData = requests.get('https://api.covidtracking.com/v2/states.json').json()['data']
-StateCode = []
-for dic in StateCodeMetaData:
-    StateCode.append(dic['state_code'].lower())
-# sort(StateCode)
-# column_names = ['state_name','7','6','5','4','3','2','1']
-# df = pd.DataFrame(columns=column_names)
-state_names = []
-for state in StateCode:
-    state_names.append(state.upper())
-df = pd.DataFrame({'state_name':state_names})
+###
 
-
-# today = '2021-02-11'
-# for i in range(7):
-#     today = getYesterday(today)
-#     # df.join(getTodayCases(today))
-#     df = pd.concat([df, getTodayCases(today)], axis=1)
-# print(df)
-
-# average = []
-# for i in range(56):
-#     temp = 0
-#     for j in range(1,8):
-#         temp = temp + df.iloc[i,j]
-#     temp = (int)(temp/7)
-#     average.append(temp)
-
-# avg = pd.DataFrame({'average': average})
-# df = pd.concat([df, avg], axis=1)
-# print(df)
-# df.to_sql('covid_trend',con=engine,if_exists='replace',index=False)
-# engine.dispose()
 # print(getTodayCases('2021-02-11'))
 
 
 
-df_pred = pd.DataFrame({'state_name':state_names})
+# df_pred = pd.DataFrame({'state_name':state_names})
 def saveThirtyDays():
     today = '2021-02-11'
     for i in range(30):
@@ -119,8 +88,40 @@ def saveThirtyDays():
 
 
 def lambda_handler(event, context):
-    d = {'col1': [1, 2], 'col2': [3, 4]}
-    df = pd.DataFrame(data=d)
+    # d = {'col1': [1, 2], 'col2': [3, 4]}
+    # df = pd.DataFrame(data=d)
     
+    StateCodeMetaData = requests.get('https://api.covidtracking.com/v2/states.json').json()['data']
+    StateCode = []
+    for dic in StateCodeMetaData:
+        StateCode.append(dic['state_code'].lower())
+    # sort(StateCode)
+    # column_names = ['state_name','7','6','5','4','3','2','1']
+    # df = pd.DataFrame(columns=column_names)
+    state_names = []
+    for state in StateCode:
+        state_names.append(state.upper())
+    df = pd.DataFrame({'state_name':state_names})
+    ##
     
+    today = '2021-02-11'
+    for i in range(7):
+        today = getYesterday(today)
+        # df.join(getTodayCases(today))
+        df = pd.concat([df, getTodayCases(today)], axis=1)
+    print(df)
+    
+    average = []
+    for i in range(56):
+        temp = 0
+        for j in range(1,8):
+            temp = temp + df.iloc[i,j]
+        temp = (int)(temp/7)
+        average.append(temp)
+    
+    avg = pd.DataFrame({'average': average})
+    df = pd.concat([df, avg], axis=1)
+    print(df)
+    df.to_sql('covid_trend',con=engine,if_exists='replace',index=False)
+    engine.dispose()
     return df.to_json()
