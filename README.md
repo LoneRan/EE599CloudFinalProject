@@ -25,6 +25,8 @@ etc.
 
 - The web application will then run under "0.0.0.0:5000"
 
+- The applicstion is currently deployed on AWS EC2, with IP address: http://54.187.66.102:5000/
+
 # How to use
 1. Navigate to `http://0.0.0.0:5000`
 2. Sign in/up to our website or direct use search function
